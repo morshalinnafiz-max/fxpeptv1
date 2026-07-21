@@ -1,0 +1,83 @@
+<%- include('partials/header', { title: 'Shopping Cart' }) %>
+
+<div class="page-header">
+  <h1>Shopping Cart</h1>
+  <p>Review your research peptide order</p>
+</div>
+
+<% if (cart.length === 0) { %>
+  <div class="empty-state" style="padding:6rem 2rem">
+    <div style="font-size:4rem;margin-bottom:1rem">&#128722;</div>
+    <h2>Your cart is empty</h2>
+    <p style="margin-bottom:1.5rem">Add some research compounds to get started.</p>
+    <a href="/products" class="btn btn-primary btn-lg">Browse Products</a>
+  </div>
+<% } else { %>
+  <div class="cart-layout">
+    <div>
+      <div class="cart-table">
+        <% cart.forEach(function(item) { %>
+          <div class="cart-item">
+            <div class="cart-item-img">
+              <img src="/images/<%= item.image %>" alt="<%= item.name %>" />
+            </div>
+            <div>
+              <div class="cart-item-name"><%= item.name %></div>
+              <div class="cart-item-strength"><%= item.strength %></div>
+              <div style="font-size:.75rem;color:#16a34a;margin-top:.2rem">&#10003; 99% Purity</div>
+            </div>
+            <div class="cart-item-qty">
+              <form action="/cart/update" method="POST" style="display:flex;align-items:center;gap:.5rem">
+                <input type="hidden" name="productId" value="<%= item.productId %>" />
+                <input type="number" name="quantity" value="<%= item.quantity %>" min="0" max="99"
+                  style="width:55px;text-align:center;border:2px solid #e2e8f0;border-radius:8px;padding:.35rem;font-size:.9rem;outline:none"
+                  onchange="this.form.submit()" />
+              </form>
+            </div>
+            <div class="cart-item-price cart-item-total">$<%= (item.price * item.quantity).toFixed(2) %></div>
+            <div>
+              <form action="/cart/remove" method="POST">
+                <input type="hidden" name="productId" value="<%= item.productId %>" />
+                <button type="submit" style="background:none;border:none;cursor:pointer;color:#94a3b8;font-size:1.2rem;padding:.3rem" title="Remove">&times;</button>
+              </form>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+      <div style="margin-top:1rem">
+        <a href="/products" class="btn btn-outline-blue">&larr; Continue Shopping</a>
+      </div>
+    </div>
+
+    <div class="cart-summary">
+      <h3>Order Summary</h3>
+      <% cart.forEach(function(item) { %>
+        <div class="cart-total-row">
+          <span><%= item.name %> &times; <%= item.quantity %></span>
+          <span>$<%= (item.price * item.quantity).toFixed(2) %></span>
+        </div>
+      <% }); %>
+      <div class="cart-total-final">
+        <span>Total (CAD)</span>
+        <span>$<%= total.toFixed(2) %></span>
+      </div>
+
+      <div class="payment-box" style="margin-bottom:1.2rem">
+        <h3>&#128179; E-Transfer</h3>
+        <div class="pay-email">info@fxpept.ca</div>
+        <p>After placing your order, send exact amount via Interac e-transfer. Include order number in memo.</p>
+      </div>
+
+      <% if (user) { %>
+        <a href="/checkout" class="btn btn-primary btn-full btn-lg">Proceed to Checkout &rarr;</a>
+      <% } else { %>
+        <a href="/login" class="btn btn-primary btn-full btn-lg">Login to Checkout &rarr;</a>
+        <div style="text-align:center;margin-top:.8rem;font-size:.83rem;color:#64748b">
+          No account? <a href="/register" style="color:#2563eb">Register free</a>
+        </div>
+      <% } %>
+    </div>
+  </div>
+<% } %>
+
+<%- include('partials/footer') %>

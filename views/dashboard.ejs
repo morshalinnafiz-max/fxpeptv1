@@ -1,0 +1,81 @@
+<%- include('partials/header', { title: 'Dashboard' }) %>
+
+<div class="dashboard-layout">
+  <div class="dashboard-header">
+    <h1>Welcome back, <%= user.name %> &#128075;</h1>
+    <p>Manage your orders and research account</p>
+  </div>
+
+  <div class="dashboard-grid">
+    <div class="dash-stat">
+      <span class="dash-stat-value"><%= orders.length %></span>
+      <span class="dash-stat-label">Total Orders</span>
+    </div>
+    <div class="dash-stat" style="background:linear-gradient(135deg,#0d2044,#1a3a6e)">
+      <span class="dash-stat-value">$<%= orders.reduce(function(s,o){ return s + o.total; }, 0).toFixed(0) %></span>
+      <span class="dash-stat-label">Total Spent (CAD)</span>
+    </div>
+    <div class="dash-stat" style="background:linear-gradient(135deg,#1a3a6e,#1d4ed8)">
+      <span class="dash-stat-value"><%= orders.filter(function(o){ return o.status === 'Pending Payment'; }).length %></span>
+      <span class="dash-stat-label">Awaiting Payment</span>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:1rem;margin-bottom:2.5rem;flex-wrap:wrap">
+    <a href="/products" class="btn btn-primary">&#128300; Browse Products</a>
+    <a href="/orders" class="btn btn-outline-blue">&#128230; View All Orders</a>
+    <a href="/cart" class="btn btn-outline-blue">&#128722; View Cart</a>
+  </div>
+
+  <h2 style="font-size:1.2rem;color:#0d2044;margin-bottom:1rem">Recent Orders</h2>
+
+  <% if (orders.length === 0) { %>
+    <div class="empty-state">
+      <div style="font-size:3rem;margin-bottom:1rem">&#128230;</div>
+      <h2>No orders yet</h2>
+      <p>Browse our catalog and place your first research peptide order.</p>
+      <a href="/products" class="btn btn-primary" style="margin-top:1.2rem">Shop Now</a>
+    </div>
+  <% } else { %>
+    <% orders.slice(0, 5).forEach(function(order) { %>
+      <div class="order-card">
+        <div class="order-card-header">
+          <div>
+            <div class="order-number"><%= order.order_number %></div>
+            <div class="order-date"><%= new Date(order.created_at).toLocaleDateString('en-CA', { year:'numeric', month:'long', day:'numeric' }) %></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:.8rem">
+            <span class="order-status status-<%= order.status.toLowerCase().replace(/ /g, '-') %>"><%= order.status %></span>
+            <a href="/order/<%= order.order_number %>" class="btn btn-sm btn-outline-blue">View &rarr;</a>
+          </div>
+        </div>
+        <div class="order-card-body">
+          <div class="order-items">
+            <% order.items.slice(0,3).forEach(function(item) { %>
+              <div class="order-item">
+                <span class="order-item-name"><%= item.name %> <%= item.strength %> &times; <%= item.quantity %></span>
+                <span class="order-item-price">$<%= (item.price * item.quantity).toFixed(2) %></span>
+              </div>
+            <% }); %>
+            <% if (order.items.length > 3) { %>
+              <div style="font-size:.8rem;color:#94a3b8">+<%= order.items.length - 3 %> more items</div>
+            <% } %>
+          </div>
+        </div>
+        <div class="order-card-footer">
+          <span class="order-total">Total: $<%= order.total.toFixed(2) %> CAD</span>
+          <% if (order.status === 'Pending Payment') { %>
+            <span style="font-size:.8rem;color:#854d0e;background:#fef9c3;padding:.3rem .7rem;border-radius:6px">&#8987; Send to info@fxpept.ca &middot; Ref: <%= order.order_number %></span>
+          <% } %>
+        </div>
+      </div>
+    <% }); %>
+    <% if (orders.length > 5) { %>
+      <div style="text-align:center;margin-top:1rem">
+        <a href="/orders" class="btn btn-outline-blue">View All <%= orders.length %> Orders &rarr;</a>
+      </div>
+    <% } %>
+  <% } %>
+</div>
+
+<%- include('partials/footer') %>

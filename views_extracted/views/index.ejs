@@ -1,0 +1,202 @@
+<%- include('partials/header', { title: 'Research Peptides Canada' }) %>
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">
+      <span></span>
+      Laboratory Research Peptides
+    </div>
+    <h1>
+      Buy Research<br>Peptides
+      <span class="hero-canada">Canada</span>
+    </h1>
+    <p class="hero-desc">
+      FxPept supplies premium Canadian research peptides with verified batch testing,
+      third-party COAs, same-day dispatch, and discreet packaging.
+    </p>
+    <div class="hero-btns">
+      <a href="/products" class="btn btn-primary btn-lg">Shop All Peptides</a>
+      <a href="/products?category=Recovery+%26+Blends" class="btn btn-ghost btn-lg">Browse Blends</a>
+    </div>
+    <div class="hero-trust">
+      <div class="hero-trust-item"><span class="t-icon">🔬</span> Lab Tested</div>
+      <div class="hero-trust-item"><span class="t-icon">📋</span> COA Verified</div>
+      <div class="hero-trust-item"><span class="t-icon">🚚</span> Fast Shipping</div>
+      <div class="hero-trust-item"><span class="t-icon">🔒</span> Discreet</div>
+    </div>
+  </div>
+
+  <div class="hero-vials">
+    <div class="vial-wrap"><img src="/images/bpc157-10mg.jpeg" alt="BPC-157 10mg" /></div>
+    <div class="vial-wrap"><img src="/images/tb500-10mg.jpeg"  alt="TB-500 10mg" /></div>
+    <div class="vial-wrap"><img src="/images/cjc-ipa-5-5.jpeg" alt="CJC+IPA" /></div>
+  </div>
+</section>
+
+<!-- ═══════════════════ TRUST BAR ═══════════════════ -->
+<div class="trust-bar">
+  <div class="trust-bar-track">
+    <div class="trust-bar-item"><span class="tbi-icon">✓</span> <strong>99% Purity</strong> — Every Batch</div>
+    <div class="trust-bar-item"><span class="tbi-icon">🚚</span> Same / Next Day Shipping</div>
+    <div class="trust-bar-item"><span class="tbi-icon">📋</span> Certificate of Analysis</div>
+    <div class="trust-bar-item"><span class="tbi-icon">💳</span> Interac e-Transfer</div>
+    <div class="trust-bar-item"><span class="tbi-icon">🇨🇦</span> <strong>Canadian Stock</strong></div>
+    <div class="trust-bar-item"><span class="tbi-icon">🔒</span> Discreet Packaging</div>
+    <div class="trust-bar-item"><span class="tbi-icon">🚚</span> Free Shipping over $250</div>
+    <!-- duplicate -->
+    <div class="trust-bar-item"><span class="tbi-icon">✓</span> <strong>99% Purity</strong> — Every Batch</div>
+    <div class="trust-bar-item"><span class="tbi-icon">🚚</span> Same / Next Day Shipping</div>
+    <div class="trust-bar-item"><span class="tbi-icon">📋</span> Certificate of Analysis</div>
+    <div class="trust-bar-item"><span class="tbi-icon">💳</span> Interac e-Transfer</div>
+    <div class="trust-bar-item"><span class="tbi-icon">🇨🇦</span> <strong>Canadian Stock</strong></div>
+    <div class="trust-bar-item"><span class="tbi-icon">🔒</span> Discreet Packaging</div>
+    <div class="trust-bar-item"><span class="tbi-icon">🚚</span> Free Shipping over $250</div>
+  </div>
+</div>
+
+<!-- ═══════════════════ FEATURED PRODUCTS ═══════════════════ -->
+<section class="section">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">Best Sellers</div>
+      <h2>Top Research Compounds</h2>
+      <p>Most popular peptides trusted by labs across Canada</p>
+    </div>
+    <div class="products-grid">
+      <% featured.forEach(function(p, i) { %>
+        <div class="product-card reveal reveal-delay-<%= (i % 5) + 1 %>">
+          <% if (p.badge) { %><div class="product-card-badge"><%= p.badge %></div><% } %>
+          <a href="/product/<%= p.slug %>">
+            <div class="product-card-img">
+              <img src="/images/<%= p.image %>" alt="<%= p.name %>" loading="lazy" />
+            </div>
+          </a>
+          <div class="product-card-body">
+            <div class="product-card-cat"><%= p.category %></div>
+            <div class="product-card-name"><%= p.name %></div>
+            <div class="product-card-strength"><%= p.strength %></div>
+            <div class="product-card-purity">✓ <%= p.purity %> Purity</div>
+            <div class="product-card-footer">
+              <div class="product-card-price"><sup>$</sup><%= p.price %></div>
+              <button class="btn-add-cart" data-id="<%= p.id %>">+ Cart</button>
+            </div>
+          </div>
+        </div>
+      <% }); %>
+    </div>
+    <div style="text-align:center;margin-top:2.5rem" class="reveal">
+      <a href="/products" class="btn btn-primary btn-lg">View All 52 Products →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ CATEGORIES ═══════════════════ -->
+<section class="section section-gray">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">Browse</div>
+      <h2>Shop by Category</h2>
+      <p>Four research-focused collections, curated for the lab</p>
+    </div>
+    <div class="cat-showcase">
+      <a href="/products?category=Metabolic+Research" class="cat-card cat-card-1 reveal reveal-delay-1">
+        <div class="cat-card-bg"></div>
+        <div class="cat-card-icon">⚗️</div>
+        <div class="cat-card-arrow">→</div>
+        <div class="cat-card-content">
+          <div class="cat-card-name">Metabolic Research</div>
+          <div class="cat-card-desc">GLP-1 agonists — Retatrutide, Tirzepatide, Semaglutide</div>
+        </div>
+      </a>
+      <a href="/products?category=Recovery+%26+Blends" class="cat-card cat-card-2 reveal reveal-delay-2">
+        <div class="cat-card-bg"></div>
+        <div class="cat-card-icon">🧬</div>
+        <div class="cat-card-arrow">→</div>
+        <div class="cat-card-content">
+          <div class="cat-card-name">Recovery &amp; Blends</div>
+          <div class="cat-card-desc">BPC-157, TB-500, SS-31 — tissue &amp; regeneration</div>
+        </div>
+      </a>
+      <a href="/products?category=Nootropics+%26+Longevity" class="cat-card cat-card-3 reveal reveal-delay-3">
+        <div class="cat-card-bg"></div>
+        <div class="cat-card-icon">🧠</div>
+        <div class="cat-card-arrow">→</div>
+        <div class="cat-card-content">
+          <div class="cat-card-name">Nootropics &amp; Longevity</div>
+          <div class="cat-card-desc">Semax, NAD+, Epitalon, CJC+IPA</div>
+        </div>
+      </a>
+      <a href="/products?category=Skin+%26+Specialty" class="cat-card cat-card-4 reveal reveal-delay-4">
+        <div class="cat-card-bg"></div>
+        <div class="cat-card-icon">✨</div>
+        <div class="cat-card-arrow">→</div>
+        <div class="cat-card-content">
+          <div class="cat-card-name">Skin &amp; Specialty</div>
+          <div class="cat-card-desc">GHK-Cu, Melanotan II, AOD-9604</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ WHY FXPEPT ═══════════════════ -->
+<section class="section section-dark">
+  <div class="container" style="position:relative;z-index:1">
+    <div class="section-header reveal">
+      <div class="section-label">Why FxPept</div>
+      <h2>The Premium Canadian Standard</h2>
+      <p>What separates us from every other supplier</p>
+    </div>
+    <div class="feature-grid">
+      <div class="feature-card reveal reveal-delay-1">
+        <div class="feature-card-num">01</div>
+        <div class="feature-icon">🔬</div>
+        <h3>99% Purity</h3>
+        <p>Every vial third-party tested. Certificate of Analysis available for every compound, every batch.</p>
+      </div>
+      <div class="feature-card reveal reveal-delay-2">
+        <div class="feature-card-num">02</div>
+        <div class="feature-icon">🚀</div>
+        <h3>Same-Day Dispatch</h3>
+        <p>Order before 2pm and it ships today. Domestic Canadian stock — no customs, no delays.</p>
+      </div>
+      <div class="feature-card reveal reveal-delay-3">
+        <div class="feature-card-num">03</div>
+        <div class="feature-icon">💰</div>
+        <h3>Best Prices</h3>
+        <p>30–40% below market rate. Premium research-grade compounds at the most competitive prices in Canada.</p>
+      </div>
+      <div class="feature-card reveal reveal-delay-4">
+        <div class="feature-card-num">04</div>
+        <div class="feature-icon">🔒</div>
+        <h3>Discreet &amp; Secure</h3>
+        <p>Plain packaging, no brand markings. Simple e-transfer to info@fxpept.ca — processed within 24 hours.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ PAYMENT CTA ═══════════════════ -->
+<section class="section" style="background:var(--surf-2);border-top:1px solid var(--border)">
+  <div class="container">
+    <div style="max-width:680px;margin:0 auto;display:grid;gap:2rem" class="reveal">
+      <div style="text-align:center">
+        <div class="section-label" style="margin-bottom:.8rem">Simple Payment</div>
+        <h2 style="font-size:clamp(1.8rem,4vw,2.5rem);font-weight:900;color:var(--ink);letter-spacing:-.04em;margin-bottom:.5rem">Order in Minutes</h2>
+        <p style="color:var(--txt-2);font-size:1rem">Create an account, place your order, send your e-transfer — done.</p>
+      </div>
+      <div class="payment-box">
+        <h3>💳 How to Pay</h3>
+        <div class="pay-email">info@fxpept.ca</div>
+        <p>Send your Interac e-Transfer with your order number in the message. Orders are confirmed and dispatched within 24 hours of payment receipt.</p>
+      </div>
+      <div style="display:flex;gap:.85rem;justify-content:center;flex-wrap:wrap">
+        <a href="/register" class="btn btn-primary btn-lg">Create Free Account</a>
+        <a href="/products" class="btn btn-outline btn-lg">Browse Products</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

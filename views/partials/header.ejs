@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= typeof title !== 'undefined' ? title + ' | FxPept' : 'FxPept — Research Peptides Canada' %></title>
+  <meta name="description" content="FxPept — Premium research peptides. 99% purity, verified COAs, fast Canadian shipping." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+<!-- Announcement ticker -->
+<div class="announce-bar">
+  <div class="announce-track">
+    <span class="announce-item">🚚 Free shipping <strong>orders $250+</strong></span>
+    <span class="announce-item">⚡ Same &amp; next day shipping</span>
+    <span class="announce-item">🔬 <strong>99% purity</strong> guaranteed</span>
+    <span class="announce-item">💳 Interac e-Transfer accepted</span>
+    <span class="announce-item">🇨🇦 <strong>Proudly Canadian</strong></span>
+    <span class="announce-item">📋 COAs available for every batch</span>
+    <span class="announce-item">🔒 Discreet &amp; secure packaging</span>
+    <!-- duplicate for seamless loop -->
+    <span class="announce-item">🚚 Free shipping <strong>orders $250+</strong></span>
+    <span class="announce-item">⚡ Same &amp; next day shipping</span>
+    <span class="announce-item">🔬 <strong>99% purity</strong> guaranteed</span>
+    <span class="announce-item">💳 Interac e-Transfer accepted</span>
+    <span class="announce-item">🇨🇦 <strong>Proudly Canadian</strong></span>
+    <span class="announce-item">📋 COAs available for every batch</span>
+    <span class="announce-item">🔒 Discreet &amp; secure packaging</span>
+  </div>
+</div>
+
+<!-- Navbar -->
+<header class="site-header" id="siteHeader">
+  <div class="nav-inner">
+    <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+
+    <a href="/" class="nav-logo">
+      <div class="nav-logo-text">FX<span>PEPT</span></div>
+      <span class="nav-tagline">Research Peptides</span>
+    </a>
+
+    <nav class="nav-links-desktop">
+      <a href="/products">Products</a>
+      <a href="/calculator">Calculator</a>
+      <% if (user) { %>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/orders">Orders</a>
+        <a href="/logout">Logout</a>
+      <% } else { %>
+        <a href="/login">Login</a>
+        <a href="/register" class="btn-nav-register">Register</a>
+      <% } %>
+    </nav>
+
+    <div class="nav-right">
+      <a href="/cart" class="nav-cart-btn" aria-label="Cart">
+        🛒
+        <% var cartCount = (typeof cartCount !== 'undefined' && cartCount > 0) ? cartCount : 0; %>
+        <% if (cartCount > 0) { %><span class="cart-badge"><%= cartCount %></span><% } %>
+      </a>
+    </div>
+  </div>
+
+  <div class="nav-search-bar">
+    <form action="/products" method="GET">
+      <input type="text" name="q" placeholder="Search peptides, compounds…" value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>" />
+      <button type="submit">Search</button>
+    </form>
+  </div>
+</header>
+
+<!-- Drawer overlay -->
+<div class="nav-drawer-overlay" id="drawerOverlay"></div>
+
+<!-- Mobile drawer -->
+<div class="nav-drawer" id="navDrawer">
+  <div class="nav-drawer-header">
+    <div class="logo-text">FX<span>PEPT</span></div>
+    <button class="nav-drawer-close" id="drawerClose">&times;</button>
+  </div>
+  <ul>
+    <li><a href="/products"><span class="d-icon">🔬</span> All Products</a></li>
+    <li><a href="/products?category=Metabolic+Research"><span class="d-icon">⚗️</span> Metabolic Research</a></li>
+    <li><a href="/products?category=Recovery+%26+Blends"><span class="d-icon">🧬</span> Recovery &amp; Blends</a></li>
+    <li><a href="/products?category=Nootropics+%26+Longevity"><span class="d-icon">🧠</span> Nootropics &amp; Longevity</a></li>
+    <li><a href="/products?category=Skin+%26+Specialty"><span class="d-icon">✨</span> Skin &amp; Specialty</a></li>
+    <li><a href="/calculator"><span class="d-icon">🧮</span> Peptide Calculator</a></li>
+    <li><a href="/cart"><span class="d-icon">🛒</span> Cart</a></li>
+    <% if (user) { %>
+      <li><a href="/dashboard"><span class="d-icon">📊</span> Dashboard</a></li>
+      <li><a href="/orders"><span class="d-icon">📦</span> My Orders</a></li>
+      <li><a href="/logout"><span class="d-icon">🚪</span> Logout</a></li>
+    <% } else { %>
+      <li><a href="/login"><span class="d-icon">🔑</span> Login</a></li>
+      <li><a href="/register"><span class="d-icon">✅</span> Create Account</a></li>
+    <% } %>
+  </ul>
+</div>
+
+<!-- Flash messages -->
+<% if (success && success.length > 0) { %>
+  <div class="flash-container">
+    <% success.forEach(function(msg) { %><div class="alert alert-success">✓ <%= msg %></div><% }); %>
+  </div>
+<% } %>
+<% if (error && error.length > 0) { %>
+  <div class="flash-container">
+    <% error.forEach(function(msg) { %><div class="alert alert-error">⚠ <%= msg %></div><% }); %>
+  </div>
+<% } %>
+
+<script>
+(function(){
+  var hamburger = document.getElementById('hamburger');
+  var drawer    = document.getElementById('navDrawer');
+  var overlay   = document.getElementById('drawerOverlay');
+  var closeBtn  = document.getElementById('drawerClose');
+  var header    = document.getElementById('siteHeader');
+
+  function open()  { drawer.classList.add('open'); overlay.classList.add('open'); hamburger.classList.add('open'); document.body.style.overflow='hidden'; }
+  function close() { drawer.classList.remove('open'); overlay.classList.remove('open'); hamburger.classList.remove('open'); document.body.style.overflow=''; }
+  if(hamburger) hamburger.addEventListener('click', open);
+  if(closeBtn)  closeBtn.addEventListener('click', close);
+  if(overlay)   overlay.addEventListener('click', close);
+
+  // Scroll shadow
+  window.addEventListener('scroll', function(){ header.classList.toggle('scrolled', window.scrollY > 8); }, {passive:true});
+
+  // Scroll reveal
+  var observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.addEventListener('DOMContentLoaded', function(){
+    document.querySelectorAll('.reveal').forEach(function(el){ observer.observe(el); });
+  });
+})();
+</script>

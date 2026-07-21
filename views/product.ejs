@@ -1,0 +1,116 @@
+<%- include('partials/header', { title: product.name + ' ' + product.strength }) %>
+
+<div class="breadcrumb">
+  <div class="breadcrumb-inner">
+    <a href="/">Home</a> <span>&rsaquo;</span>
+    <a href="/products">Products</a> <span>&rsaquo;</span>
+    <a href="/products?category=<%= encodeURIComponent(product.category) %>"><%= product.category %></a> <span>&rsaquo;</span>
+    <span><%= product.name %> <%= product.strength %></span>
+  </div>
+</div>
+
+<div class="product-detail">
+  <div class="product-detail-image">
+    <img src="/images/<%= product.image %>" alt="<%= product.name %> <%= product.strength %>" />
+    <div style="margin-top:1.2rem;display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap">
+      <span class="badge badge-green">&#10003; 99% Purity</span>
+      <span class="badge badge-blue">&#127464;&#127462; Canadian Stock</span>
+      <span class="badge badge-blue">&#128203; COA Available</span>
+    </div>
+  </div>
+
+  <div class="product-detail-info">
+    <div class="product-detail-cat"><%= product.category %></div>
+    <h1 class="product-detail-name"><%= product.name %></h1>
+    <div class="product-detail-strength">Strength: <strong><%= product.strength %></strong></div>
+
+    <% if (product.badge) { %>
+      <div class="product-badges">
+        <span class="badge badge-gold">&#11088; <%= product.badge %></span>
+      </div>
+    <% } %>
+
+    <div class="product-detail-price-block">
+      <div class="product-detail-price">$<%= product.price %></div>
+      <span style="color:#64748b;font-size:.9rem">CAD</span>
+    </div>
+
+    <p class="product-detail-desc"><%- product.description %></p>
+
+    <div class="product-add-form">
+      <div class="qty-input">
+        <button class="qty-btn" data-dir="down" type="button">&minus;</button>
+        <input type="number" value="1" min="1" max="99" data-id="<%= product.id %>" />
+        <button class="qty-btn" data-dir="up" type="button">+</button>
+      </div>
+      <button class="btn btn-primary btn-lg btn-add-cart" data-id="<%= product.id %>" style="flex:1">
+        &#128722; Add to Cart
+      </button>
+    </div>
+
+    <a href="/cart" class="btn btn-outline-blue btn-full" style="margin-bottom:.5rem">View Cart &rarr;</a>
+
+    <div class="payment-box" style="margin-top:1.5rem">
+      <h3>&#128179; Payment Method</h3>
+      <div class="pay-email">info@fxpept.ca</div>
+      <p>Send e-transfer after placing your order. Include your order number in the memo. Processing within 24hrs.</p>
+    </div>
+
+    <div class="product-trust">
+      <div class="trust-item">
+        <div class="trust-icon">&#128300;</div>
+        <div class="trust-text"><strong>99% Purity</strong><span>Verified COA</span></div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">&#128666;</div>
+        <div class="trust-text"><strong>Fast Shipping</strong><span>Domestic Canada</span></div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">&#128300;</div>
+        <div class="trust-text"><strong>Research Grade</strong><span>Lab Use Only</span></div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">&#128274;</div>
+        <div class="trust-text"><strong>Discreet Pack</strong><span>Private &amp; Secure</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% if (related.length > 0) { %>
+<div class="related-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">More in <%= product.category %></span>
+      <h2>Related Products</h2>
+    </div>
+    <div class="products-grid">
+      <% related.forEach(function(p) { %>
+        <div class="product-card">
+          <% if (p.badge) { %><div class="product-card-badge"><%= p.badge %></div><% } %>
+          <a href="/product/<%= p.slug %>">
+            <div class="product-card-img">
+              <img src="/images/<%= p.image %>" alt="<%= p.name %> <%= p.strength %>" loading="lazy" />
+            </div>
+          </a>
+          <div class="product-card-body">
+            <div class="product-card-cat"><%= p.category %></div>
+            <div class="product-card-name"><%= p.name %></div>
+            <div class="product-card-strength"><%= p.strength %></div>
+            <div class="product-card-purity">&#10003; <%= p.purity %> Purity</div>
+            <div class="product-card-footer">
+              <div class="product-card-price"><sup>$</sup><%= p.price %></div>
+              <div style="display:flex;gap:.4rem">
+                <button class="btn btn-sm btn-outline-blue btn-add-cart" data-id="<%= p.id %>">+ Cart</button>
+                <a href="/product/<%= p.slug %>" class="btn btn-sm btn-primary">Details</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% }); %>
+    </div>
+  </div>
+</div>
+<% } %>
+
+<%- include('partials/footer') %>

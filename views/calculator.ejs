@@ -1,0 +1,159 @@
+<%- include('partials/header', { title: 'Peptide Reconstitution Calculator' }) %>
+
+<div class="page-header">
+  <h1>🧮 Peptide Calculator</h1>
+  <p>Reconstitution &amp; dosing calculator for research peptides</p>
+</div>
+
+<section class="section" style="padding-top:2.5rem">
+  <div class="container" style="max-width:860px">
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem" id="calcGrid">
+
+      <!-- ── INPUT PANEL ── -->
+      <div style="background:var(--surf);border:1.5px solid var(--border);border-radius:var(--r-xl);padding:2rem">
+        <h2 style="font-size:1.1rem;font-weight:800;color:var(--ink);margin-bottom:1.5rem;letter-spacing:-.02em">
+          ⚗️ Reconstitution Inputs
+        </h2>
+
+        <div class="form-group">
+          <label>Peptide Amount in Vial (mg)</label>
+          <input type="number" id="vialMg" value="5" min="0.1" step="0.1"
+            placeholder="e.g. 5" oninput="calculate()" />
+        </div>
+
+        <div class="form-group">
+          <label>Bacteriostatic Water Added (mL)</label>
+          <input type="number" id="bactWaterMl" value="2" min="0.1" step="0.1"
+            placeholder="e.g. 2" oninput="calculate()" />
+        </div>
+
+        <div class="form-group">
+          <label>Desired Dose per Injection (mcg)</label>
+          <input type="number" id="doseMcg" value="250" min="1" step="1"
+            placeholder="e.g. 250" oninput="calculate()" />
+        </div>
+
+        <div class="form-group">
+          <label>Syringe Size (units) — typically 100 IU = 1 mL</label>
+          <select id="syringeSize" onchange="calculate()">
+            <option value="100">100 IU (1 mL insulin syringe)</option>
+            <option value="50">50 IU (0.5 mL insulin syringe)</option>
+          </select>
+        </div>
+
+        <div style="background:var(--blue-pale);border:1px solid var(--blue-bdr);border-radius:var(--r);padding:.9rem 1rem;font-size:.8rem;color:var(--blue);line-height:1.6;margin-top:.5rem">
+          📋 <strong>How to use:</strong> Enter your vial size and how much bacteriostatic water you'll add to reconstitute it. Set your target dose and the calculator will tell you exactly how many units to draw.
+        </div>
+      </div>
+
+      <!-- ── RESULTS PANEL ── -->
+      <div style="background:var(--ink);border-radius:var(--r-xl);padding:2rem;color:#fff;position:relative;overflow:hidden">
+        <div style="position:absolute;top:-40px;right:-40px;width:180px;height:180px;border-radius:50%;background:rgba(37,99,235,.2);pointer-events:none"></div>
+        <h2 style="font-size:1.1rem;font-weight:800;color:#fff;margin-bottom:1.5rem;letter-spacing:-.02em;position:relative;z-index:1">
+          📊 Results
+        </h2>
+
+        <div style="position:relative;z-index:1;display:flex;flex-direction:column;gap:1rem">
+          <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:var(--r);padding:1.1rem">
+            <div style="font-size:.65rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:.3rem">Concentration</div>
+            <div style="font-size:1.5rem;font-weight:900;color:var(--blue-3);letter-spacing:-.02em" id="concentration">—</div>
+            <div style="font-size:.75rem;color:rgba(255,255,255,.4);margin-top:.1rem">mcg per mL</div>
+          </div>
+
+          <div style="background:rgba(37,99,235,.15);border:1px solid rgba(96,165,250,.25);border-radius:var(--r);padding:1.1rem">
+            <div style="font-size:.65rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:.3rem">Draw Per Dose</div>
+            <div style="font-size:2.2rem;font-weight:900;color:#fff;letter-spacing:-.03em" id="drawUnits">—</div>
+            <div style="font-size:.75rem;color:rgba(255,255,255,.4);margin-top:.1rem" id="drawMl">— mL on your syringe</div>
+          </div>
+
+          <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:var(--r);padding:1.1rem">
+            <div style="font-size:.65rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:.3rem">Total Doses in Vial</div>
+            <div style="font-size:1.5rem;font-weight:900;color:var(--blue-3);letter-spacing:-.02em" id="totalDoses">—</div>
+            <div style="font-size:.75rem;color:rgba(255,255,255,.4);margin-top:.1rem">at chosen dose</div>
+          </div>
+
+          <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:var(--r);padding:1.1rem">
+            <div style="font-size:.65rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:.3rem">Total Peptide</div>
+            <div style="font-size:1.5rem;font-weight:900;color:var(--blue-3);letter-spacing:-.02em" id="totalMcg">—</div>
+            <div style="font-size:.75rem;color:rgba(255,255,255,.4);margin-top:.1rem">mcg in vial</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── HOW IT WORKS ── -->
+    <div style="margin-top:1.5rem;background:var(--surf-2);border:1.5px solid var(--border);border-radius:var(--r-xl);padding:1.8rem">
+      <h3 style="font-size:.95rem;font-weight:800;color:var(--ink);margin-bottom:1.1rem">📖 Reconstitution Guide</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.2rem">
+        <div>
+          <div style="font-weight:700;color:var(--blue);font-size:.82rem;margin-bottom:.3rem">① Clean the vial top</div>
+          <p style="font-size:.79rem;color:var(--txt-2);line-height:1.65">Wipe the rubber stopper of your peptide vial with a 70% alcohol swab and let dry for 30 seconds.</p>
+        </div>
+        <div>
+          <div style="font-weight:700;color:var(--blue);font-size:.82rem;margin-bottom:.3rem">② Draw bacteriostatic water</div>
+          <p style="font-size:.79rem;color:var(--txt-2);line-height:1.65">Use a fresh syringe to draw the calculated amount of bacteriostatic water (BW). Inject slowly down the side of the vial — do not aim directly at the lyophilized powder.</p>
+        </div>
+        <div>
+          <div style="font-weight:700;color:var(--blue);font-size:.82rem;margin-bottom:.3rem">③ Swirl gently</div>
+          <p style="font-size:.79rem;color:var(--txt-2);line-height:1.65">Gently swirl — never shake — until the powder is fully dissolved. The solution should be clear. Store reconstituted peptides at 2–8°C.</p>
+        </div>
+        <div>
+          <div style="font-weight:700;color:var(--blue);font-size:.82rem;margin-bottom:.3rem">④ Draw your dose</div>
+          <p style="font-size:.79rem;color:var(--txt-2);line-height:1.65">Use the "Draw Per Dose" number above. On a 100-unit insulin syringe, each unit = 0.01 mL.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── DISCLAIMER ── -->
+    <div style="margin-top:1.2rem;background:rgba(239,68,68,.05);border:1px solid rgba(239,68,68,.15);border-radius:var(--r);padding:1rem 1.1rem;font-size:.78rem;color:#7f1d1d;line-height:1.65">
+      ⚠ <strong>Research Use Only.</strong> This calculator is provided as a tool for qualified research professionals. All peptides sold by FxPept are strictly for in-vitro and laboratory research. Not for human consumption or clinical use.
+    </div>
+
+    <!-- ── CTA ── -->
+    <div style="text-align:center;margin-top:2rem">
+      <a href="/products" class="btn btn-primary btn-lg">Shop Research Peptides →</a>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  @media(max-width:680px){
+    #calcGrid { grid-template-columns: 1fr !important; }
+  }
+</style>
+
+<script>
+function calculate() {
+  var vialMg     = parseFloat(document.getElementById('vialMg').value)     || 0;
+  var bactWater  = parseFloat(document.getElementById('bactWaterMl').value) || 0;
+  var doseMcg    = parseFloat(document.getElementById('doseMcg').value)     || 0;
+  var syringeIU  = parseInt(document.getElementById('syringeSize').value)   || 100;
+
+  if (vialMg <= 0 || bactWater <= 0 || doseMcg <= 0) {
+    ['concentration','drawUnits','drawMl','totalDoses','totalMcg'].forEach(function(id){
+      var el = document.getElementById(id);
+      if (el) el.textContent = '—';
+    });
+    return;
+  }
+
+  var totalMcg    = vialMg * 1000;                    // mg → mcg
+  var concPerMl   = totalMcg / bactWater;             // mcg/mL
+  var mlPerDose   = doseMcg / concPerMl;              // mL per dose
+  var unitsPerDose = mlPerDose * syringeIU;           // IU units
+  var totalDoses  = totalMcg / doseMcg;
+
+  document.getElementById('totalMcg').textContent      = totalMcg.toLocaleString() + ' mcg';
+  document.getElementById('concentration').textContent  = concPerMl.toFixed(1) + ' mcg/mL';
+  document.getElementById('drawUnits').textContent      = unitsPerDose.toFixed(1) + ' IU';
+  document.getElementById('drawMl').textContent         = mlPerDose.toFixed(3) + ' mL on your syringe';
+  document.getElementById('totalDoses').textContent     = totalDoses.toFixed(1) + ' doses';
+}
+
+// Run on load
+calculate();
+</script>
+
+<%- include('partials/footer') %>

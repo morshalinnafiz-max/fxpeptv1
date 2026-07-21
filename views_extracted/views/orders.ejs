@@ -1,0 +1,59 @@
+<%- include('partials/header', { title: 'My Orders' }) %>
+
+<div class="page-header">
+  <h1>My Orders</h1>
+  <p>Track all your research peptide orders</p>
+</div>
+
+<div class="dashboard-layout">
+  <% if (orders.length === 0) { %>
+    <div class="empty-state">
+      <div style="font-size:3rem;margin-bottom:1rem">&#128230;</div>
+      <h2>No orders yet</h2>
+      <p>Browse our catalog and place your first order.</p>
+      <a href="/products" class="btn btn-primary" style="margin-top:1.2rem">Shop Now</a>
+    </div>
+  <% } else { %>
+    <% var hasPending = orders.some(function(o){ return o.status === 'Pending Payment'; }); %>
+    <% if (hasPending) { %>
+      <div class="payment-box" style="margin-bottom:2rem">
+        <h3>&#128179; Payment Pending</h3>
+        <div class="pay-email">info@fxpept.ca</div>
+        <p>You have orders awaiting payment. Send Interac e-transfer with your order number in the memo field.</p>
+      </div>
+    <% } %>
+
+    <% orders.forEach(function(order) { %>
+      <div class="order-card">
+        <div class="order-card-header">
+          <div>
+            <div class="order-number"><%= order.order_number %></div>
+            <div class="order-date"><%= new Date(order.created_at).toLocaleDateString('en-CA', { year:'numeric', month:'long', day:'numeric' }) %></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap">
+            <span class="order-status status-<%= order.status.toLowerCase().replace(/ /g, '-') %>"><%= order.status %></span>
+            <a href="/order/<%= order.order_number %>" class="btn btn-sm btn-primary">View Details &rarr;</a>
+          </div>
+        </div>
+        <div class="order-card-body">
+          <div class="order-items">
+            <% order.items.forEach(function(item) { %>
+              <div class="order-item">
+                <span class="order-item-name"><%= item.name %> <%= item.strength %> &times; <%= item.quantity %></span>
+                <span class="order-item-price">$<%= (item.price * item.quantity).toFixed(2) %></span>
+              </div>
+            <% }); %>
+          </div>
+        </div>
+        <div class="order-card-footer">
+          <span class="order-total">Total: $<%= order.total.toFixed(2) %> CAD</span>
+          <% if (order.status === 'Pending Payment') { %>
+            <span style="font-size:.8rem;color:#854d0e;background:#fef9c3;padding:.3rem .7rem;border-radius:6px">&#8987; Awaiting payment to info@fxpept.ca</span>
+          <% } %>
+        </div>
+      </div>
+    <% }); %>
+  <% } %>
+</div>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,75 @@
+<%- include('partials/header', { title: 'All Products', searchQuery: searchQuery }) %>
+
+<div class="page-header">
+  <h1>Research Peptide Catalog</h1>
+  <p>52 compounds · 99% Purity · Verified COA · Fast Canadian Shipping</p>
+</div>
+
+<div class="breadcrumb">
+  <div class="breadcrumb-inner">
+    <a href="/">Home</a> <span>›</span> <span>Products</span>
+    <% if (currentCategory && currentCategory !== 'all') { %>
+      <span>›</span> <span><%= currentCategory %></span>
+    <% } %>
+  </div>
+</div>
+
+<section class="section" style="padding-top:2.5rem">
+  <div class="container">
+
+    <!-- Filters row -->
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:1.8rem">
+      <div class="category-tabs" style="flex-wrap:nowrap;overflow-x:auto;padding-bottom:.25rem">
+        <a href="/products" class="cat-tab <%= currentCategory === 'all' ? 'active' : '' %>">All</a>
+        <% categories.forEach(function(cat) { %>
+          <a href="/products?category=<%= encodeURIComponent(cat) %>" class="cat-tab <%= currentCategory === cat ? 'active' : '' %>"><%= cat %></a>
+        <% }); %>
+      </div>
+      <p style="color:var(--txt-3);font-size:.82rem;flex-shrink:0"><strong style="color:var(--txt)"><%= products.length %></strong> products</p>
+    </div>
+
+    <% if (searchQuery) { %>
+      <div class="alert alert-info" style="margin-bottom:1.5rem">
+        🔍 Results for "<strong><%= searchQuery %></strong>" — <%= products.length %> found.
+        <a href="/products" style="margin-left:.5rem;font-weight:700">Clear ×</a>
+      </div>
+    <% } %>
+
+    <% if (products.length === 0) { %>
+      <div class="empty-state">
+        <div style="font-size:3.5rem;margin-bottom:1rem">🔬</div>
+        <h2>No products found</h2>
+        <p>Try a different search or category.</p>
+        <a href="/products" class="btn btn-primary" style="margin-top:1.5rem">Browse All</a>
+      </div>
+    <% } else { %>
+      <div class="products-grid">
+        <% products.forEach(function(p, i) { %>
+          <div class="product-card reveal reveal-delay-<%= (i % 5) + 1 %>">
+            <% if (p.badge) { %><div class="product-card-badge"><%= p.badge %></div><% } %>
+            <a href="/product/<%= p.slug %>">
+              <div class="product-card-img">
+                <img src="/images/<%= p.image %>" alt="<%= p.name %> <%= p.strength %>" loading="lazy" />
+              </div>
+            </a>
+            <div class="product-card-body">
+              <div class="product-card-cat"><%= p.category %></div>
+              <div class="product-card-name"><%= p.name %></div>
+              <div class="product-card-strength"><%= p.strength %></div>
+              <div class="product-card-purity">✓ <%= p.purity %> Purity</div>
+              <div class="product-card-footer">
+                <div class="product-card-price"><sup>$</sup><%= p.price %></div>
+                <div style="display:flex;gap:.4rem;align-items:center">
+                  <button class="btn-add-cart" data-id="<%= p.id %>">+ Cart</button>
+                  <a href="/product/<%= p.slug %>" class="btn btn-sm btn-outline-blue">View</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+    <% } %>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

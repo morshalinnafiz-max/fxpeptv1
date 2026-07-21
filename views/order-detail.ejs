@@ -1,0 +1,82 @@
+<%- include('partials/header', { title: 'Order ' + order.order_number }) %>
+
+<div class="breadcrumb">
+  <div class="breadcrumb-inner">
+    <a href="/">Home</a> <span>&rsaquo;</span>
+    <a href="/dashboard">Dashboard</a> <span>&rsaquo;</span>
+    <a href="/orders">Orders</a> <span>&rsaquo;</span>
+    <span><%= order.order_number %></span>
+  </div>
+</div>
+
+<div class="dashboard-layout">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;margin-bottom:2rem">
+    <div>
+      <h1 style="font-size:1.8rem;color:#0d2044">Order <%= order.order_number %></h1>
+      <p style="color:#64748b"><%= new Date(order.created_at).toLocaleDateString('en-CA', { year:'numeric', month:'long', day:'numeric' }) %></p>
+    </div>
+    <span class="order-status status-<%= order.status.toLowerCase().replace(/ /g, '-') %>" style="font-size:.95rem;padding:.5rem 1.2rem"><%= order.status %></span>
+  </div>
+
+  <div style="background:white;border:1px solid #e2e8f0;border-radius:12px;padding:1.8rem;margin-bottom:1.5rem">
+    <h3 style="font-size:1rem;color:#0d2044;margin-bottom:1.5rem">Order Status</h3>
+    <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
+      <% var statuses = ['Pending Payment','Processing','Shipped','Delivered']; %>
+      <% var currentIdx = statuses.indexOf(order.status); %>
+      <% statuses.forEach(function(s, i) { %>
+        <% var isActive = i <= currentIdx; %>
+        <div style="display:flex;align-items:center;gap:.5rem">
+          <div style="width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;flex-shrink:0;<%= isActive ? 'background:#2563eb;color:white' : 'background:#f1f5f9;color:#94a3b8;border:2px solid #e2e8f0' %>"><%= i + 1 %></div>
+          <span style="font-size:.82rem;font-weight:<%= isActive ? '700' : '400' %>;color:<%= isActive ? '#0d2044' : '#94a3b8' %>;white-space:nowrap"><%= s %></span>
+        </div>
+        <% if (i < 3) { %>
+          <div style="flex:1;min-width:16px;height:2px;background:<%= i < currentIdx ? '#2563eb' : '#e2e8f0' %>"></div>
+        <% } %>
+      <% }); %>
+    </div>
+  </div>
+
+  <div class="detail-grid" style="display:grid;grid-template-columns:1fr 320px;gap:1.5rem;align-items:start">
+    <div style="background:white;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden">
+      <div style="background:#f8fafc;padding:1rem 1.4rem;border-bottom:1px solid #e2e8f0;font-weight:700;color:#0d2044">&#128230; Items Ordered</div>
+      <% order.items.forEach(function(item) { %>
+        <div style="display:flex;align-items:center;gap:1rem;padding:1rem 1.4rem;border-bottom:1px solid #f8fafc">
+          <div style="width:60px;height:60px;background:#f8fafc;border-radius:8px;overflow:hidden;flex-shrink:0">
+            <img src="/images/<%= item.image %>" alt="<%= item.name %>" style="width:100%;height:100%;object-fit:contain;padding:.3rem" />
+          </div>
+          <div style="flex:1">
+            <div style="font-weight:600;color:#0a1628"><%= item.name %></div>
+            <div style="font-size:.82rem;color:#94a3b8"><%= item.strength %> &middot; Qty: <%= item.quantity %></div>
+          </div>
+          <div style="font-weight:700;color:#1d4ed8">$<%= (item.price * item.quantity).toFixed(2) %></div>
+        </div>
+      <% }); %>
+      <div style="padding:1rem 1.4rem;display:flex;justify-content:space-between;font-weight:800;font-size:1rem;color:#0a1628">
+        <span>Order Total (CAD)</span>
+        <span>$<%= order.total.toFixed(2) %></span>
+      </div>
+    </div>
+
+    <div>
+      <div class="payment-box" style="margin-bottom:1rem">
+        <h3>&#128179; Payment</h3>
+        <div class="pay-email">info@fxpept.ca</div>
+        <p>Send <strong>$<%= order.total.toFixed(2) %> CAD</strong> via e-Transfer. Use <strong><%= order.order_number %></strong> as memo.</p>
+      </div>
+      <% if (order.notes) { %>
+        <div style="background:white;border:1px solid #e2e8f0;border-radius:12px;padding:1.2rem;margin-bottom:1rem">
+          <div style="font-weight:700;color:#0d2044;margin-bottom:.5rem;font-size:.88rem">NOTES</div>
+          <p style="font-size:.88rem;color:#64748b;line-height:1.6"><%= order.notes %></p>
+        </div>
+      <% } %>
+      <div style="display:flex;flex-direction:column;gap:.6rem">
+        <a href="/orders" class="btn btn-outline-blue btn-full">&larr; Back to Orders</a>
+        <a href="/products" class="btn btn-primary btn-full">Shop More</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>@media(max-width:700px){.detail-grid{grid-template-columns:1fr !important}}</style>
+
+<%- include('partials/footer') %>

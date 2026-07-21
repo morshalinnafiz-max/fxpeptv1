@@ -1,0 +1,111 @@
+
+<!-- FOOTER -->
+<footer style="background:var(--ink);color:rgba(255,255,255,.6);padding:4rem 0 1.5rem;border-top:1px solid rgba(37,99,235,.15)">
+  <div class="container">
+
+    <!-- Top grid -->
+    <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:3rem;margin-bottom:3.5rem">
+
+      <!-- Brand -->
+      <div>
+        <div style="font-size:1.5rem;font-weight:900;color:#fff;letter-spacing:-.04em;margin-bottom:.5rem">
+          FX<span style="color:var(--blue-2)">PEPT</span>
+        </div>
+        <p style="font-size:.83rem;color:rgba(255,255,255,.38);line-height:1.75;max-width:240px;margin-bottom:1.2rem">
+          Premium research peptides for Canadian labs. 99% purity guaranteed, verified COAs, fast domestic shipping.
+        </p>
+        <a href="mailto:info@fxpept.ca" style="display:inline-flex;align-items:center;gap:.4rem;color:var(--blue-3);font-size:.84rem;font-weight:600">
+          📧 info@fxpept.ca
+        </a>
+      </div>
+
+      <!-- Products -->
+      <div>
+        <h4 style="font-size:.65rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:1rem">Products</h4>
+        <ul style="display:flex;flex-direction:column;gap:.5rem">
+          <li><a href="/products?category=Metabolic+Research" style="font-size:.84rem;color:rgba(255,255,255,.5);transition:color .15s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">Metabolic Research</a></li>
+          <li><a href="/products?category=Recovery+%26+Blends" style="font-size:.84rem;color:rgba(255,255,255,.5);transition:color .15s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">Recovery &amp; Blends</a></li>
+          <li><a href="/products?category=Nootropics+%26+Longevity" style="font-size:.84rem;color:rgba(255,255,255,.5);transition:color .15s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">Nootropics &amp; Longevity</a></li>
+          <li><a href="/products?category=Skin+%26+Specialty" style="font-size:.84rem;color:rgba(255,255,255,.5);transition:color .15s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">Skin &amp; Specialty</a></li>
+          <li><a href="/products" style="font-size:.84rem;color:rgba(255,255,255,.5);transition:color .15s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">All Products</a></li>
+        </ul>
+      </div>
+
+      <!-- Account -->
+      <div>
+        <h4 style="font-size:.65rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:1rem">Account</h4>
+        <ul style="display:flex;flex-direction:column;gap:.5rem">
+          <li><a href="/register" style="font-size:.84rem;color:rgba(255,255,255,.5);transition:color .15s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">Create Account</a></li>
+          <li><a href="/login" style="font-size:.84rem;color:rgba(255,255,255,.5);transition:color .15s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">Login</a></li>
+          <li><a href="/orders" style="font-size:.84rem;color:rgba(255,255,255,.5);transition:color .15s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">Track Orders</a></li>
+          <li><a href="/dashboard" style="font-size:.84rem;color:rgba(255,255,255,.5);transition:color .15s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">Dashboard</a></li>
+          <li><a href="/cart" style="font-size:.84rem;color:rgba(255,255,255,.5);transition:color .15s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">Cart</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Disclaimer -->
+    <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:1rem 1.2rem;font-size:.76rem;color:rgba(255,255,255,.35);line-height:1.65;margin-bottom:2rem">
+      ⚠ <strong style="color:rgba(255,255,255,.5)">Research Use Only.</strong> All products sold by FxPept are intended strictly for laboratory and in-vitro research purposes only. Not for human consumption. Not intended to diagnose, treat, cure, or prevent any disease or medical condition. For qualified research professionals only.
+    </div>
+
+    <!-- Bottom bar -->
+    <div style="border-top:1px solid rgba(255,255,255,.07);padding-top:1.2rem;display:flex;justify-content:space-between;align-items:center;font-size:.73rem;color:rgba(255,255,255,.22);flex-wrap:wrap;gap:.5rem">
+      <span>&copy; 2026 FxPept Research Peptides Inc. All rights reserved.</span>
+      <span>Canada · Research Use Only</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 3000);
+}
+
+// AJAX Add to cart
+document.addEventListener('click', function(e) {
+  var btn = e.target.closest('.btn-add-cart');
+  if (!btn) return;
+  var id  = btn.dataset.id;
+  var inp = document.querySelector('input[data-id="' + id + '"]');
+  var qty = inp ? (parseInt(inp.value) || 1) : 1;
+  var orig = btn.textContent;
+  btn.textContent = '…'; btn.disabled = true;
+  fetch('/cart/add', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({productId:id, quantity:qty})
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(d){
+    btn.textContent = '✓ Added';
+    setTimeout(function(){ btn.textContent = orig; btn.disabled = false; }, 1600);
+    if (d.success) {
+      showToast('Added to cart!');
+      document.querySelectorAll('.cart-badge').forEach(function(b){ b.textContent = d.cartCount; });
+      if (d.cartCount > 0 && !document.querySelector('.cart-badge')) {
+        var cb = document.querySelector('.nav-cart-btn');
+        if (cb) { var s = document.createElement('span'); s.className='cart-badge'; s.textContent=d.cartCount; cb.appendChild(s); }
+      }
+    }
+  })
+  .catch(function(){ btn.textContent = orig; btn.disabled = false; });
+});
+
+// Qty buttons
+document.addEventListener('click', function(e) {
+  var btn = e.target.closest('.qty-btn');
+  if (!btn) return;
+  var inp = btn.parentElement.querySelector('input');
+  var v = parseInt(inp.value) || 1;
+  inp.value = btn.dataset.dir === 'up' ? Math.min(v+1,99) : Math.max(v-1,1);
+});
+</script>
+</body>
+</html>

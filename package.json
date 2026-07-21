@@ -1,0 +1,18 @@
+{
+  "name": "fxpept",
+  "version": "1.0.0",
+  "description": "FxPept Research Peptides Canada",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^9.6.0",
+    "connect-flash": "^0.1.1",
+    "ejs": "^3.1.10",
+    "express": "^4.22.2",
+    "express-session": "^1.19.0"
+  }
+}
