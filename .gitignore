@@ -1,0 +1,8 @@
+node_modules/
+data/fxpept.db
+data/fxpept.db-wal
+data/fxpept.db-shm
+views_extracted/
+public_extracted/
+.cache/
+*.log
